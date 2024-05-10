@@ -47,17 +47,13 @@ int main(){
     Menu::iniciarMenu();
     /*Memoria memoria = Memoria();
     Proceso* proceso;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 2; i++){
         proceso = crearProceso();
         memoria.tomarFrames(proceso);
     }
     memoria.mostrarMatriz();
     cout<<endl<<endl;
-    proceso = crearProceso();
-    if(memoria.isEspacioSuficiente(proceso)){
-        memoria.tomarFrames(proceso);
-    }
-    memoria.mostrarMatriz();
+    memoria.mostrarUbicacionProcesos();
 */
     /*
     memoria.buscarFrame(proceso);

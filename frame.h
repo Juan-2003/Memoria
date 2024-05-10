@@ -34,6 +34,7 @@ class Frame{
 
 
         void insertarProceso();
+        void aumentarPosicion();
         std::string toString();
 
 };

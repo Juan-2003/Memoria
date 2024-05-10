@@ -4,7 +4,7 @@
 #include "proceso.h"
 using namespace std;
 
-int Frame::idClase = 0;
+int Frame::idClase = -1;
 int Frame::posicion = 0;
 Frame::Frame(){
     espacioDisponible = 0;
@@ -81,9 +81,15 @@ bool Frame::obtenerEspacio(){
     //return true;
 }
 
+void Frame::aumentarPosicion(){
+    posicion++;
+}
+
 string Frame::toString(){
-    return to_string(espacioDisponible) + "/" + to_string(ESPACIO_TOTAL)
-            + "  " + estatus + "  " + "Proceso ID: "
-            + (procesoAsignado != nullptr ? to_string(procesoAsignado->getId()): "------");
+    return  to_string(idFrame) + "  " +  
+            to_string(espacioDisponible) + "/" + to_string(ESPACIO_TOTAL)+ "  " +
+            estatus + "  " + 
+            "Proceso ID: " + 
+            (procesoAsignado != nullptr ? to_string(procesoAsignado->getId()): "------");
 
 }

@@ -80,34 +80,10 @@ void Menu::comandos(Memoria &memoria,set<Proceso*>&listaProcesosTotales, vector<
                     otraTecla = _getch(); //Se guarda la tecla seleccionada
                 }
             } while(otraTecla != 'c'); //El programa seguira pausado mientras no se haga click en 'c'
+            system("cls");
             break;
     }
 }
-
-/*
-system("cls");
-    listaListos.assign(listaNuevos.begin(), listaNuevos.end());
-
-    Memoria memoria = Memoria();
-    memoria.inicializarMatriz(listaListos);
-
-
-    memoria.mostrarMatriz();
-    system("pause");
-    system("cls");
-
-    memoria.desocuparFrames(listaListos[1]);
-    memoria.desocuparFrames(listaListos[3]);
-    memoria.mostrarMatriz();
-    system("pause");
-    system("cls");
-
-    Proceso* proceso = crearProceso();
-    proceso->setPeso(11);
-    memoria.tomarFrames(proceso);
-    memoria.mostrarMatriz();
-    system("pause");
-*/
 
 void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& listaNuevos, vector<Proceso*>& listaListos, vector<Proceso*>& listaEjecucion, vector<Proceso*>& listaBloqueados, vector<Proceso*>& listaTerminados, int quantum){
     system("cls");
@@ -119,13 +95,11 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
     }
     listaNuevos.clear();
 
-
     Memoria memoria = Memoria();
     memoria.inicializarMatriz(listaListos);
 
 
     while(!memoria.isMemoriaVacia()){
-        int quantumActual = 0;
         //Para pasar de nuevos a listos si hay espacio en memoria
         if(!listaNuevos.empty()){
             for(int i = 0; i < listaNuevos.size(); i++){
@@ -146,8 +120,10 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
         //Se pasa el primer proceso a la lista de ejecucion y
         //se elima de la lista actual
         //Aqui ya empieza EJECUCION
-        listaEjecucion.push_back(listaListos[0]);
-        listaListos.erase(listaListos.begin());
+        if(listaEjecucion.empty()){
+            listaEjecucion.push_back(listaListos[0]);
+            listaListos.erase(listaListos.begin());
+        }
 
         //Si un proceso regresa de nuevo a lista, y no esta bloqueado
         // o algo similar, se verificara si ya esta dentro de memoria.
@@ -165,10 +141,21 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
         int TR = proceso->getTR();
         int TT = proceso->getTT();
         proceso->setEstadoActual("Ejecucion");
+    
+        if(proceso->getQuantumActual() >= quantum){
+            proceso->setQuantumActual(0);
+        }
+        int quantumActual = proceso->getQuantumActual();
+
 
         cout<<"PROCESO "<<proceso->getId()<<endl;
         memoria.mostrarMatriz();
+        cout<<endl;
+        cout<<"PROCESO EN EJECUCION"<<endl;
+        cout<<listaEjecucion[0]->ejecucion()<<endl<<endl;
         char tecla = ',';
+        bool terminarBuclePorBloqueado = false;
+        bool banderaQuantumActual = true;
         while(quantumActual < quantum){
             TR--;
             TT++;
@@ -176,7 +163,6 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
             contadorGlobal++;
             cout << "\rTME: " << TME << "TT: " << TT << " TR: " << TR << " Quantum: " << quantum << "Quantum Actual: "<< quantumActual << " Contador Global: " <<contadorGlobal<<flush;
             Sleep(1000);
-
 
             if(TR == 0){//Si TR es 0 significa que ya cumplio su tiempo
                 memoria.desocuparFrames(proceso);
@@ -194,8 +180,9 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
 
                 comandos(memoria,listaProcesosTotales, listaNuevos, listaListos,listaEjecucion, listaBloqueados, listaTerminados, tecla);
 
-                if(tecla == 'e'){
-                    memoria.desocuparFrames(proceso);
+                if(tecla == 'e'){                   
+                   // memoria.desocuparFrames(proceso);
+                    memoria.cambiarEstatusFrame(proceso, "Bloqueado");
                     listaBloqueados[listaBloqueados.size() - 1]->setTR(TR);
                     listaBloqueados[listaBloqueados.size() - 1]->setTT(TT);
                     break;
@@ -207,18 +194,36 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
                 else if(tecla == 'n'){
                     proceso->setTR(TR);
                     proceso->setTT(TT);
+                    proceso->setQuantumActual(quantumActual);
+                    banderaQuantumActual = false;
                     break;
                 }
-
+                else if(tecla == 'b'){
+                    memoria.mostrarMatriz();
+                }
+                else if(tecla == 't'){
+                    system("cls");
+                    char otraTecla;
+                    memoria.mostrarUbicacionProcesos();
+                    do {
+                        if(_kbhit()) {
+                            otraTecla = _getch(); //Se guarda la tecla seleccionada
+                        }
+                    } while(otraTecla != 'c'); //El programa seguira pausado mientras no se haga click en 'c'
+                    system("cls");
+                    memoria.mostrarMatriz();
+                }
             }
-            bool terminarBuclePorBloqueado = false;
+            
             for(int i = 0; i < listaBloqueados.size(); i++){
                 listaBloqueados[i]->setTTbloqueado(listaBloqueados[i]->getTTbloqueado()+1);
                 if(listaBloqueados[i]->getTTbloqueado()==8){
+                    system("pause");
                     listaBloqueados[i]->setTTbloqueado(0);
                     listaListos.push_back(listaBloqueados[i]);
                     listaBloqueados.erase(listaBloqueados.begin());
                     terminarBuclePorBloqueado = true;
+                    banderaQuantumActual = false;
                     break;
                 }
             }
@@ -226,16 +231,23 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
                 break;
             }
         }
-        cout<<"1"<<endl;
-        if(TT != TME && tecla != 'w' && tecla != 'e' && tecla != 'n'){
+        //Si esta bandera esta en 'true' significa que se necesita que se reinicie a 0
+        if(banderaQuantumActual){
+            proceso->setQuantumActual(0);
+        }else{
+            proceso->setQuantumActual(quantumActual);
+        }
+
+        if(TT != TME && tecla != 'w' && tecla != 'e'){
             listaEjecucion[0]->setTEspera(proceso->getTRetorno() - proceso->getTServicio());
             listaEjecucion[0]->setTR(TR);
             listaEjecucion[0]->setTT(TT);
-            listaListos.push_back(listaEjecucion[0]);
-            listaEjecucion.pop_back();
+
+            if(tecla != 'n' && !terminarBuclePorBloqueado){
+                listaListos.push_back(listaEjecucion[0]);
+                listaEjecucion.pop_back();
+            }
         }
-        cout<<"2"<<endl;
-        cout<<"3"<<endl;
         system("pause");
         system("cls");
     }
@@ -314,7 +326,6 @@ Proceso* Menu::crearProceso(){
     operando1 = 1+rand()%(1001-1);//operador 1
     operando2 = 1+rand()%(1001-1); //operador 2
     TME = 5+rand()%(19-5); //TME
-    //int peso = 5;
     Operacion operacion = Operacion(operando1, operando2, operador); //Se crea un objeto tipo 'Operacion'
     Proceso* proceso = new Proceso(nombre, operacion, id, TME);//Se crea un objeto tipo 'Proceso'
     return proceso;

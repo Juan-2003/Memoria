@@ -21,6 +21,7 @@ class Proceso{
         int TRespuesta;
         std::string estadoActual;
         int peso;
+        int quantumActual;
 
     public:
         Proceso();
@@ -43,6 +44,7 @@ class Proceso{
         void setTRespuesta(int);
         void setEstadoActual(std::string);
         void setPeso(int);
+        void setQuantumActual(int);
 
         std::string getNombre();
         Operacion& getOperacion();
@@ -60,6 +62,7 @@ class Proceso{
         int getTRespuesta();
         std::string getEstadoActual();
         int getPeso();
+        int getQuantumActual();
 
         std::string loteActual();
         std::string terminados();

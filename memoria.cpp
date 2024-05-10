@@ -48,6 +48,7 @@ void Memoria::tomarFrames(Proceso* proceso){
     int pesoTemporal = proceso->getPeso();//Se guarda el peso del proceso actual
     for(int j = 0; j < cantidadFramesAocupar; j++){//Se ecarga de iterar la cantidad de veces de frames
         for(int i = 0; i < 10; i++){
+            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames
             if(!(frames[i].isOcupado()) && pesoTemporal != 0){
                 pesoTemporal = frames[i].asignarProceso(proceso, pesoTemporal);
                 ubicacionProceso[proceso].push_back(&frames[posicion]);
@@ -166,10 +167,22 @@ bool Memoria::isMemoriaVacia(){
     return false;
 }
 
+void Memoria::mostrarUbicacionProcesos(){
+    cout<<" Pagina    Marco"<<endl;
+    for(auto i : ubicacionProceso){
+        Proceso* proceso = i.first;
+        
+        for(Frame* frame : i.second){
+            cout<<"   "<<proceso->getId()<<"        "<<frame->getIdFrame()<<endl;
+        }
+    }
+
+}
+
 
 
 void Memoria::mostrarMatriz(){
     for(Frame f : frames){
         cout<<f.toString()<<endl;
-    }
+    }   
 }
