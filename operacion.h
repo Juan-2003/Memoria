@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
-
 #ifndef OPERACION_H_INCLUDED
 #define OPERACION_H_INCLUDED
-
 class Operacion{
     private:
         float operando1;
@@ -29,5 +27,4 @@ class Operacion{
         std::string toString();
 };
 
-
-#endif
+#endif // OPERACION_H_INCLUDED

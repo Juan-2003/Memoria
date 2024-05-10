@@ -15,7 +15,7 @@ Memoria::Memoria(){
 }
 
 /*void Memoria::agregarElemento(int posicion, int tamano){
-    while(tamano != 0){ 
+    while(tamano != 0){
         if(!(frames[posicion].isOcupado())){//Se verifica si el frame no esta ocupado
             tamano = frames[posicion].aumentarValor(tamano);
         }
@@ -58,7 +58,7 @@ void Memoria::tomarFrames(Proceso* proceso){
         }
 
     }
-    
+
 }
 
 void Memoria::desocuparFrames(Proceso* proceso){
@@ -111,7 +111,7 @@ void Memoria::cambiarEstatusFrame(Proceso* proceso, string estatusNuevo){
  }
 
 bool Memoria::isEspacioSuficiente(Proceso* proceso){
-    int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar 
+    int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar
     int cantidad = 0;
     for(int i = 0; i < frames.size(); i++){
         if(!(frames[i].isOcupado())){
@@ -157,7 +157,7 @@ bool Memoria::isMemoriaVacia(){
         if(!frames[i].isOcupado()){
             framesNoOcupados++;
             if(framesNoOcupados == totalFrames){
-                
+
                 return true;
             }
         }

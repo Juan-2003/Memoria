@@ -42,7 +42,7 @@ char Menu::elegirOperador(int opcionOperador){  //Servira para poder elegir el o
 
 
 
-void Menu::comandos(set<Proceso*>&listaProcesosTotales, vector<Proceso*>&listaNuevos, vector<Proceso*>& listaListos, vector<Proceso*>& listaEjecucion, vector<Proceso*>& listaBloqueados, vector<Proceso*>& listaTerminados, char tecla) {
+void Menu::comandos(Memoria &memoria,set<Proceso*>&listaProcesosTotales, vector<Proceso*>&listaNuevos, vector<Proceso*>& listaListos, vector<Proceso*>& listaEjecucion, vector<Proceso*>& listaBloqueados, vector<Proceso*>& listaTerminados, char tecla) {
     char otraTecla;
     switch(tecla) {
         case 'w': //Interrupcion
@@ -66,8 +66,11 @@ void Menu::comandos(set<Proceso*>&listaProcesosTotales, vector<Proceso*>&listaNu
             break;
 
         case 'n':
-            listaNuevos.push_back(crearProceso());
-
+             if(!memoria.isMemoriaLLena()){
+                listaListos.push_back(crearProceso());
+            }else{
+                listaNuevos.push_back(crearProceso());
+            }
             break;
 
         case 'b':
@@ -84,7 +87,7 @@ void Menu::comandos(set<Proceso*>&listaProcesosTotales, vector<Proceso*>&listaNu
 /*
 system("cls");
     listaListos.assign(listaNuevos.begin(), listaNuevos.end());
-    
+
     Memoria memoria = Memoria();
     memoria.inicializarMatriz(listaListos);
 
@@ -92,13 +95,13 @@ system("cls");
     memoria.mostrarMatriz();
     system("pause");
     system("cls");
-    
+
     memoria.desocuparFrames(listaListos[1]);
     memoria.desocuparFrames(listaListos[3]);
     memoria.mostrarMatriz();
     system("pause");
     system("cls");
-    
+
     Proceso* proceso = crearProceso();
     proceso->setPeso(11);
     memoria.tomarFrames(proceso);
@@ -109,8 +112,14 @@ system("cls");
 void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& listaNuevos, vector<Proceso*>& listaListos, vector<Proceso*>& listaEjecucion, vector<Proceso*>& listaBloqueados, vector<Proceso*>& listaTerminados, int quantum){
     system("cls");
     listaListos.assign(listaNuevos.begin(), listaNuevos.end());
+    if(!listaNuevos.empty()){
+        for(int i=0;i<listaNuevos.size();i++){
+            listaProcesosTotales.insert(listaNuevos[i]);
+        }
+    }
     listaNuevos.clear();
-    
+
+
     Memoria memoria = Memoria();
     memoria.inicializarMatriz(listaListos);
 
@@ -122,15 +131,21 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
             for(int i = 0; i < listaNuevos.size(); i++){
                 listaListos.push_back(listaNuevos[0]);
                 listaNuevos.erase(listaNuevos.begin());
-                if(memoria.isEspacioSuficiente(listaNuevos[i])){       
+                if(memoria.isEspacioSuficiente(listaNuevos[i])){
                     memoria.tomarFrames(listaNuevos[i]);
                 }
             }
 
         }
-        //Se pasa el primer proceso a la lista de ejecucion y 
+        for(auto& proceso: listaListos){
+            proceso->setEstadoActual("Listos");
+            if(proceso->getTLL()==-1){
+                (contadorGlobal == -1)?proceso->setTLL(contadorGlobal+1): proceso->setTLL(contadorGlobal);
+            }
+        }
+        //Se pasa el primer proceso a la lista de ejecucion y
         //se elima de la lista actual
-       
+        //Aqui ya empieza EJECUCION
         listaEjecucion.push_back(listaListos[0]);
         listaListos.erase(listaListos.begin());
 
@@ -149,7 +164,7 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
         int TME = proceso->getTME();
         int TR = proceso->getTR();
         int TT = proceso->getTT();
-
+        proceso->setEstadoActual("Ejecucion");
 
         cout<<"PROCESO "<<proceso->getId()<<endl;
         memoria.mostrarMatriz();
@@ -158,17 +173,18 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
             TR--;
             TT++;
             quantumActual++;
-            cout << "\rTME: " << TME << "TT: " << TT << " TR: " << TR << " Quantum: " << quantum << "Quantum Actual: "<< quantumActual << flush;
+            contadorGlobal++;
+            cout << "\rTME: " << TME << "TT: " << TT << " TR: " << TR << " Quantum: " << quantum << "Quantum Actual: "<< quantumActual << " Contador Global: " <<contadorGlobal<<flush;
             Sleep(1000);
-            
-        
+
+
             if(TR == 0){//Si TR es 0 significa que ya cumplio su tiempo
                 memoria.desocuparFrames(proceso);
+                listaEjecucion[0]->setTFinalizacion(contadorGlobal);
+                listaEjecucion[0]->setTRetorno(proceso->getTFinalizacion() - proceso->getTLL());
                 listaTerminados.push_back(listaEjecucion[0]);
+                listaTerminados[listaTerminados.size()-1]->setEstadoActual("Terminados");
                 listaEjecucion.pop_back();
-                for(int i = 0; i < listaTerminados.size(); i++){
-                    cout<<listaTerminados[i]->getId()<<endl;
-                }
                 break;
             }
 
@@ -176,8 +192,8 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
             if(_kbhit()){
                 tecla = _getch();
 
-                comandos(listaProcesosTotales, listaNuevos, listaListos,listaEjecucion, listaBloqueados, listaTerminados, tecla);
-                
+                comandos(memoria,listaProcesosTotales, listaNuevos, listaListos,listaEjecucion, listaBloqueados, listaTerminados, tecla);
+
                 if(tecla == 'e'){
                     memoria.desocuparFrames(proceso);
                     listaBloqueados[listaBloqueados.size() - 1]->setTR(TR);
@@ -189,9 +205,11 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
                     break;
                 }
                 else if(tecla == 'n'){
+                    proceso->setTR(TR);
+                    proceso->setTT(TT);
                     break;
                 }
-            
+
             }
             bool terminarBuclePorBloqueado = false;
             for(int i = 0; i < listaBloqueados.size(); i++){
@@ -210,12 +228,13 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
         }
         cout<<"1"<<endl;
         if(TT != TME && tecla != 'w' && tecla != 'e' && tecla != 'n'){
+            listaEjecucion[0]->setTEspera(proceso->getTRetorno() - proceso->getTServicio());
+            listaEjecucion[0]->setTR(TR);
+            listaEjecucion[0]->setTT(TT);
             listaListos.push_back(listaEjecucion[0]);
             listaEjecucion.pop_back();
         }
         cout<<"2"<<endl;
-        proceso->setTR(TR);
-        proceso->setTT(TT);
         cout<<"3"<<endl;
         system("pause");
         system("cls");
@@ -225,10 +244,16 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
     cout<<"TERMINADOS"<<endl;
     cout<<listaTerminados.size()<<endl;
     for(int i = 0; i < listaTerminados.size(); i++){
+        listaEjecucion[i]->setEstadoActual("Terminados");
         cout<<listaTerminados[i]->getId()<<"   "<<listaTerminados[i]->getOperacion().getResultado()<<endl;
     }
+    if(listaNuevos.size() == 0 && listaListos.size()==0 && listaBloqueados.size()==0 && listaEjecucion.size()==0){//Cuando la lista actual este vacia, se mostrara la informacion correspondiente
+        mostrarBCP(listaProcesosTotales);
 
-    
+    }else{//Mientras que el tama�o de la lista actual sea mayor que 0, la funcion se llamara asi misma para actualizar lo que se ve en pantalla
+        mostrarInfo(listaProcesosTotales, listaNuevos, listaListos, listaEjecucion, listaBloqueados, listaTerminados,quantum);
+    }
+
 }
 
 void Menu::procesoBloqueados(vector<Proceso*>& listaListos, vector<Proceso*>& listaBloqueados){
@@ -267,9 +292,9 @@ void Menu::mostrarBCP(set<Proceso*>&listaProcesosTotales){
     cout<<setw(15)<<left<<"TServicio";
     cout<<setw(15)<<left<<"TRespuesta"<<endl;
 
-   /* for(auto& objeto : listaProcesosTotales){
+    for(auto& objeto : listaProcesosTotales){
         cout<<objeto->BCP()<<endl;
-    }*/
+    }
     /*for(int i = 0; i < listaProcesosTotales.size(); i++){
         cout<<listaProcesosTotales[i]->BCP()<<endl;
     }*/
