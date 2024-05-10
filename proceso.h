@@ -1,7 +1,5 @@
 #include <string>
 #include "operacion.h"
-
-
 #ifndef PROCESO_H_INCLUDED
 #define PROCESO_H_INCLUDED
 
@@ -70,4 +68,5 @@ class Proceso{
         std::string BCP();
         std::string toString();
 };
-#endif
+
+#endif // PROCESO_H_INCLUDED
