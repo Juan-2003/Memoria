@@ -37,6 +37,7 @@ Proceso* crearProceso(){
     operando1 = 1+rand()%(1001-1);//operador 1
     operando2 = 1+rand()%(1001-1); //operador 2
     TME = 5+rand()%(19-5); //TME
+    //peso =  6 + rand() % 21;
     //int peso = 5;
     Operacion operacion = Operacion(operando1, operando2, operador); //Se crea un objeto tipo 'Operacion'
     Proceso* proceso = new Proceso(nombre, operacion, id, TME);//Se crea un objeto tipo 'Proceso'
@@ -47,17 +48,13 @@ int main(){
     Menu::iniciarMenu();
     /*Memoria memoria = Memoria();
     Proceso* proceso;
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 2; i++){
         proceso = crearProceso();
         memoria.tomarFrames(proceso);
     }
     memoria.mostrarMatriz();
     cout<<endl<<endl;
-    proceso = crearProceso();
-    if(memoria.isEspacioSuficiente(proceso)){
-        memoria.tomarFrames(proceso);
-    }
-    memoria.mostrarMatriz();
+    memoria.mostrarUbicacionProcesos();
 */
     /*
     memoria.buscarFrame(proceso);

@@ -15,7 +15,7 @@ Memoria::Memoria(){
 }
 
 /*void Memoria::agregarElemento(int posicion, int tamano){
-    while(tamano != 0){ 
+    while(tamano != 0){
         if(!(frames[posicion].isOcupado())){//Se verifica si el frame no esta ocupado
             tamano = frames[posicion].aumentarValor(tamano);
         }
@@ -48,6 +48,7 @@ void Memoria::tomarFrames(Proceso* proceso){
     int pesoTemporal = proceso->getPeso();//Se guarda el peso del proceso actual
     for(int j = 0; j < cantidadFramesAocupar; j++){//Se ecarga de iterar la cantidad de veces de frames
         for(int i = 0; i < 10; i++){
+            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames
             if(!(frames[i].isOcupado()) && pesoTemporal != 0){
                 pesoTemporal = frames[i].asignarProceso(proceso, pesoTemporal);
                 ubicacionProceso[proceso].push_back(&frames[posicion]);
@@ -58,7 +59,7 @@ void Memoria::tomarFrames(Proceso* proceso){
         }
 
     }
-    
+
 }
 
 void Memoria::desocuparFrames(Proceso* proceso){
@@ -111,7 +112,7 @@ void Memoria::cambiarEstatusFrame(Proceso* proceso, string estatusNuevo){
  }
 
 bool Memoria::isEspacioSuficiente(Proceso* proceso){
-    int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar 
+    int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar
     int cantidad = 0;
     for(int i = 0; i < frames.size(); i++){
         if(!(frames[i].isOcupado())){
@@ -157,13 +158,25 @@ bool Memoria::isMemoriaVacia(){
         if(!frames[i].isOcupado()){
             framesNoOcupados++;
             if(framesNoOcupados == totalFrames){
-                
+
                 return true;
             }
         }
     }
 
     return false;
+}
+
+void Memoria::mostrarUbicacionProcesos(){
+    cout<<" Pagina    Marco"<<endl;
+    for(auto i : ubicacionProceso){
+        Proceso* proceso = i.first;
+
+        for(Frame* frame : i.second){
+            cout<<"   "<<proceso->getId()<<"        "<<frame->getIdFrame()<<endl;
+        }
+    }
+
 }
 
 

@@ -57,6 +57,7 @@ Proceso::Proceso(string nombre, Operacion operacion, int id, int TME){
     setTServicio(TME);
     estadoActual = "Nuevo    ";
     this->peso = 6;
+    this->quantumActual = 0;
 }
 
 //SETTERS
@@ -118,6 +119,14 @@ void Proceso::setEstadoActual(string estadoActual){
 
 void Proceso::setPeso(int peso){
     this->peso = peso;
+}
+
+void Proceso::setQuantumActual(int quantumActual){
+    this->quantumActual = quantumActual;
+}
+
+void Proceso::setprimeravez(bool primera){
+    this->primera_vez = primera;
 }
 
 //GETTERS
@@ -185,6 +194,10 @@ int Proceso::getPeso(){
     return peso;
 }
 
+int Proceso::getQuantumActual(){
+    return quantumActual;
+}
+
 //MANERAS DISTINTAS DE MOSTRAR INFORMACION
 string Proceso::loteActual(){
     return "ID: " + to_string(id) + "\n"+
@@ -197,12 +210,17 @@ string Proceso::terminados(){
 }
 
 string Proceso::ejecucion(){
-    return "Operacion: "+operacion.getOperacion()+ "\n"+
-        "ID:         "+to_string(id);
+    return "ID:         "+to_string(id) + "\n"+
+    "Operacion: "+operacion.getOperacion();
+
 }
 
 string Proceso::bloqueado(){
     return to_string(id) + "    " + to_string(TTbloqueado);
+}
+
+bool Proceso::getprimeravez(){
+    return primera_vez;
 }
 
 string Proceso::BCP(){

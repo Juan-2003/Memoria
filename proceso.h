@@ -1,7 +1,5 @@
 #include <string>
 #include "operacion.h"
-
-
 #ifndef PROCESO_H_INCLUDED
 #define PROCESO_H_INCLUDED
 
@@ -23,12 +21,14 @@ class Proceso{
         int TRespuesta;
         std::string estadoActual;
         int peso;
+        int quantumActual;
+        bool primera_vez= false;
 
     public:
         Proceso();
         Proceso(std::string nombre,Operacion, int id, int TME, int TT, int TR);
         Proceso(std::string nombre,Operacion, int id, int TME, int idLote);
-        Proceso(std::string nombre,Operacion, int id, int TME);
+        Proceso(std::string nombre,Operacion, int id, int TME);//Este es el constructor que usualmente usamos
 
         void setNombre(std::string);
         void setOperacion(Operacion);
@@ -45,6 +45,8 @@ class Proceso{
         void setTRespuesta(int);
         void setEstadoActual(std::string);
         void setPeso(int);
+        void setQuantumActual(int);
+        void setprimeravez(bool);
 
         std::string getNombre();
         Operacion& getOperacion();
@@ -62,6 +64,8 @@ class Proceso{
         int getTRespuesta();
         std::string getEstadoActual();
         int getPeso();
+        int getQuantumActual();
+        bool getprimeravez();
 
         std::string loteActual();
         std::string terminados();
@@ -70,4 +74,6 @@ class Proceso{
         std::string BCP();
         std::string toString();
 };
-#endif
+
+
+#endif // PROCESO_H_INCLUDED

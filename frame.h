@@ -2,13 +2,13 @@
 #include "proceso.h"
 using namespace std;
 
-#ifndef FRAME_H
-#define FRAME_H
+#ifndef FRAME_H_INCLUDED
+#define FRAME_H_INCLUDED
 
 class Frame{
     private:
         //Esta variable ayudara a monitorer las posiciones siguietnes donde se puede insertar un nuevo proceso
-        static int posicion; 
+        static int posicion;
         static int idClase;
         static int const ESPACIO_TOTAL = 5;
         int espacioDisponible;
@@ -16,8 +16,8 @@ class Frame{
         bool ocupado;
         int idFrame;
         Proceso* procesoAsignado;//Ayuda a saber que proceso lo esta ocupando
-        
-    public: 
+
+    public:
         Frame();
         //int aumentarValor(int tamano);
         std::string getEstatus();
@@ -34,7 +34,11 @@ class Frame{
 
 
         void insertarProceso();
+        void aumentarPosicion();
         std::string toString();
 
 };
-#endif
+
+
+
+#endif // FRAME_H_INCLUDED

@@ -2,23 +2,22 @@
 #include "proceso.h"
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 using namespace std;
 
-#ifndef MEMORIA_H
-#define MEMORIA_H
+#ifndef MEMORIA_H_INCLUDED
+#define MEMORIA_H_INCLUDED
 
 class Memoria{
-    
+
     private:
         static int posicion;
         static const int ESPACIO = 10;
         std::vector<Frame>frames = std::vector<Frame>(ESPACIO);
-        std::unordered_map<Proceso*, std::vector<Frame*>> ubicacionProceso;
-        bool isMemoriaLLena();
-    public: 
+        std::map<Proceso*, std::vector<Frame*>> ubicacionProceso;
+    public:
         Memoria();
-        //svoid agregarElemento(int posicion, int tamano);//Le debe de llegar como parametro el tamaño del proceso
+        //svoid agregarElemento(int posicion, int tamano);//Le debe de llegar como parametro el tama�o del proceso
         void inicializarMatriz(std::vector<Proceso*>listaListos);
         //bool iniciarEjecucion(std::vector<Proceso*>listaListos, int posicion);
         //void obtenerFrame(Proceso* proceso);
@@ -30,8 +29,11 @@ class Memoria{
         bool isEspacioSuficiente(Proceso* proceso);
         bool isEspacioSuficiente();
         bool isMemoriaVacia();
-    
+        bool isMemoriaLLena();
+        void mostrarUbicacionProcesos();
+
 
 
 };
-#endif
+
+#endif // MEMORIA_H_INCLUDED
