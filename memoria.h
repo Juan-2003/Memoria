@@ -12,7 +12,7 @@ class Memoria{
 
     private:
         static int posicion;
-        static const int ESPACIO = 10;
+        static const int ESPACIO = 46;
         std::vector<Frame>frames = std::vector<Frame>(ESPACIO);
         std::map<Proceso*, std::vector<Frame*>> ubicacionProceso;
     public:

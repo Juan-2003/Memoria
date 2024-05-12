@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <set>
 #include "memoria.h"
 #include "frame.h"
 #include "proceso.h"
@@ -26,11 +27,16 @@ Memoria::Memoria(){
 }*/
 
 void Memoria::inicializarMatriz(vector<Proceso*>listaListos){
+    /*Operacion operacion = Operacion(0, 0, '+');
+    Proceso* proceso = new Proceso("SO", operacion, 10000, 0, "SO");//Se crea un objeto tipo 'Proceso'
+    tomarFrames(proceso);*/
+
+
     for(int i = 0; i < listaListos.size(); i++){//Controla que proceso le toca de la lista de Listos
         int cantidadFramesAocupar = ceil(listaListos[i]->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar
         int pesoTemporal = listaListos[i]->getPeso();//Se guarda el peso del proceso actual
         for(int j = 0; j < cantidadFramesAocupar; j++){//Se ecarga de iterar la cantidad de veces de frames
-            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames
+            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames 
             if(!(frames[posicion].isOcupado())){
                 int n = frames[posicion].asignarProceso(listaListos[i], pesoTemporal);
                 ubicacionProceso[listaListos[i]].push_back(&frames[posicion]);
@@ -44,14 +50,16 @@ void Memoria::inicializarMatriz(vector<Proceso*>listaListos){
 }
 
 void Memoria::tomarFrames(Proceso* proceso){
+    
     int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar
     int pesoTemporal = proceso->getPeso();//Se guarda el peso del proceso actual
     for(int j = 0; j < cantidadFramesAocupar; j++){//Se ecarga de iterar la cantidad de veces de frames
-        for(int i = 0; i < 10; i++){
-            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames
+        for(int i = 0; i < 46; i++){
+            int posicion = frames[0].getPosicion();//Se obtiene la posicon estatica de la clase Frames}
             if(!(frames[i].isOcupado()) && pesoTemporal != 0){
                 pesoTemporal = frames[i].asignarProceso(proceso, pesoTemporal);
-                ubicacionProceso[proceso].push_back(&frames[posicion]);
+                ubicacionProceso[proceso].push_back(&frames[i]);
+                
                 if(pesoTemporal == 0){//Si se cumple esta condicion significa que ya se asigno todo el peso
                     break;
                 }
@@ -71,11 +79,10 @@ void Memoria::desocuparFrames(Proceso* proceso){
     auto iterador = ubicacionProceso.find(proceso);
     if(iterador != ubicacionProceso.end()){
         vector<Frame*>&listaFrames = iterador->second;
-        for_each(listaFrames.begin(), listaFrames.end(), [iterador](Frame* frame){
+        for_each(listaFrames.begin(), listaFrames.end(), [](Frame* frame){
             frame->desocuparEspacio();
-            iterador->second.clear();
-
         });
+        iterador->second.clear();
     }
 }
 
@@ -153,18 +160,26 @@ bool Memoria::isMemoriaLLena(){
 bool Memoria::isMemoriaVacia(){
     int totalFrames = frames.size();
     int framesNoOcupados = 0;
+    //vector<Proceso*>posicionesOcupadas;
 
     for(int i = 0; i < frames.size(); i++){
-        if(!frames[i].isOcupado()){
+        /*if(!frames[i].isOcupado()){
             framesNoOcupados++;
             if(framesNoOcupados == totalFrames){
 
                 return true;
             }
+        }*/
+        //posicionesOcupadas.push_back(frames[i].getProcesoAsignado());
+    }
+    int contador = 0;
+    for(Frame frame : frames){
+        if(frame.isOcupado()){
+            contador++;
         }
     }
-
-    return false;
+    
+    return (contador == 5)? true : false;
 }
 
 void Memoria::mostrarUbicacionProcesos(){

@@ -86,6 +86,14 @@ void Frame::aumentarPosicion(){
 }
 
 string Frame::toString(){
+    /*if(procesoAsignado->getEstadoActual() == "SO"){
+        estatus = "SO";
+    }
+    cout<<"ESTATUS: "<<estatus<<endl;
+    */
+   if(procesoAsignado != nullptr){
+        estatus = procesoAsignado->getEstadoActual() == "SO"? "SO" : estatus;
+   }
     return  to_string(idFrame) + "  " +
             to_string(espacioDisponible) + "/" + to_string(ESPACIO_TOTAL)+ "  " +
             estatus + "  " +

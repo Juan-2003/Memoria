@@ -12,7 +12,6 @@ class Menu{
         static char elegirOperador(int opcionOperador);
         static void comandos(Memoria &memoria,std::set<Proceso*>&listaProcesosTotales, std::vector<Proceso*>& listaListos, std::vector<Proceso*>& listaActual, std::vector<Proceso*>& listaEjecucion, std::vector<Proceso*>& listaBloqueados, std::vector<Proceso*>& listaTerminados, char tecla);
         static void mostrarInfo(std::set<Proceso*>& listaProcesosTotales, std::vector<Proceso*>& listaListos, std::vector<Proceso*>& listaActual, std::vector<Proceso*>& listaEjecucion, std::vector<Proceso*>& listaBloqueados, std::vector<Proceso*>& listaTerminados, int quantum);
-        static void procesoBloqueados(std::vector<Proceso*>& listaListos,std::vector<Proceso*>&listaBloqueados);
         static Proceso* crearProceso();
         static void tablaInformacion(std::vector<Proceso>& listaTerminados);
         static void mostrarBCP(std::set<Proceso*>&listaProcesosTotales);

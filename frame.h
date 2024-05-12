@@ -19,6 +19,7 @@ class Frame{
 
     public:
         Frame();
+        
         //int aumentarValor(int tamano);
         std::string getEstatus();
         int getIdFrame();

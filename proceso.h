@@ -27,8 +27,10 @@ class Proceso{
     public:
         Proceso();
         Proceso(std::string nombre,Operacion, int id, int TME, int TT, int TR);
-        Proceso(std::string nombre,Operacion, int id, int TME, int idLote);
+        //Proceso(std::string nombre,Operacion, int id, int TME, int idLote);
         Proceso(std::string nombre,Operacion, int id, int TME);//Este es el constructor que usualmente usamos
+        Proceso(std::string nombre,Operacion, int id, int TME, int peso);//Este es el constructor que usualmente usamos
+        Proceso(std::string nombre,Operacion, int id, int TME, std::string estadoActual);//Este es el constructor que usualmente usamos
 
         void setNombre(std::string);
         void setOperacion(Operacion);

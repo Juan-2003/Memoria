@@ -27,7 +27,7 @@ Proceso::Proceso(string nombre, Operacion operacion, int id, int TME,
     setTLL(-1);
     estadoActual = "Nuevo";
 }
-Proceso::Proceso(string nombre, Operacion operacion, int id, int TME, int idLote){
+/*Proceso::Proceso(string nombre, Operacion operacion, int id, int TME, int idLote){
     setNombre(nombre);
     setOperacion(operacion);
     setId(id);
@@ -39,6 +39,25 @@ Proceso::Proceso(string nombre, Operacion operacion, int id, int TME, int idLote
     setTEspera(0);
     setTLL(-1);
     estadoActual = "Nuevo";
+}*/
+
+Proceso::Proceso(string nombre,Operacion, int id, int TME, int peso){
+    setNombre(nombre);
+    setOperacion(operacion);
+    setId(id);
+    setTME(TME);
+    setTT(0);
+    setTR(TME);
+    setTFinalizacion(-1);
+    setTEspera(-1);
+    setTTbloqueado(0);
+    setTRetorno(-1);
+    setTRespuesta(-1);
+    setTLL(-1);
+    setTServicio(TME);
+    estadoActual = "Nuevo    ";
+    this->peso = peso;
+    this->quantumActual = 0;
 }
 
 Proceso::Proceso(string nombre, Operacion operacion, int id, int TME){
@@ -56,7 +75,15 @@ Proceso::Proceso(string nombre, Operacion operacion, int id, int TME){
     setTLL(-1);
     setTServicio(TME);
     estadoActual = "Nuevo    ";
-    this->peso = 6;
+    this->peso = 3;
+    this->quantumActual = 0;
+}
+
+Proceso::Proceso(string nombre, Operacion operacion, int id, int TME, string estadoActual){
+    setNombre(nombre);
+    setOperacion(operacion);
+    this->estadoActual = estadoActual;
+    this->peso = 25;
     this->quantumActual = 0;
 }
 
