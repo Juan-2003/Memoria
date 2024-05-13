@@ -41,7 +41,7 @@ Proceso::Proceso(string nombre, Operacion operacion, int id, int TME,
     estadoActual = "Nuevo";
 }*/
 
-Proceso::Proceso(string nombre,Operacion, int id, int TME, int peso){
+Proceso::Proceso(string nombre,Operacion operacion, int id, int TME, int peso){
     setNombre(nombre);
     setOperacion(operacion);
     setId(id);

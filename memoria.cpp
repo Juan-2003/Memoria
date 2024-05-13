@@ -50,7 +50,6 @@ void Memoria::inicializarMatriz(vector<Proceso*>listaListos){
 }
 
 void Memoria::tomarFrames(Proceso* proceso){
-    
     int cantidadFramesAocupar = ceil(proceso->getPeso() / 5.0);//Se redondea hacia arriba para saber la cantidad de frames a ocupar
     int pesoTemporal = proceso->getPeso();//Se guarda el peso del proceso actual
     for(int j = 0; j < cantidadFramesAocupar; j++){//Se ecarga de iterar la cantidad de veces de frames

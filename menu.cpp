@@ -119,32 +119,30 @@ void Menu::mostrarInfo(set<Proceso*>& listaProcesosTotales, vector<Proceso*>& li
         }
     }
     jala = false;
-    
-    
-    
 
-    //memoria.inicializarMatriz(listaListos);
 
     while(!memoria.isMemoriaVacia()){
-        cout<<"Nuevos: "<<listaNuevos.size()<<endl;
         //Se crean correctamente pero se borran, y no se imprimen nada, posiblemente no esten sirviendo las condiciones de los frames
-        cout<<"SIGUIENTE PROCESO POR ENTRAR   ";
+        
+        //Para pasar de nuevos a listos si hay espacio en memoria
+        if(!listaNuevos.empty()&&memoria.isEspacioSuficiente(listaNuevos[0])){
+            for(int i = 0; i < listaNuevos.size(); i++){
+                listaListos.push_back(listaNuevos[0]);
+                memoria.tomarFrames(listaNuevos[0]);
+                listaNuevos.erase(listaNuevos.begin());
+                if(!memoria.isEspacioSuficiente(listaNuevos[i])){
+                    break;
+                }
+            }
+        }
+        cout<<"Nuevos: "<<listaNuevos.size()<<endl;
+        cout<<"SIGUIENTE PROCESO POR ENTRAR   "<<endl;
         if(listaNuevos.empty()){
             cout<<"ID: --------"<<endl<<endl;
         }else{
             cout<<"ID: "<<listaNuevos[0]->getId()<<" Peso: "<<listaNuevos[0]->getPeso()<<endl<<endl;
         }
-        //Para pasar de nuevos a listos si hay espacio en memoria
-        if(!listaNuevos.empty()&&memoria.isEspacioSuficiente(listaNuevos[0])){
-            for(int i = 0; i < listaNuevos.size(); i++){
-                listaListos.push_back(listaNuevos[0]);
-                listaNuevos.erase(listaNuevos.begin());
-                if(memoria.isEspacioSuficiente(listaNuevos[i])){
-                    memoria.tomarFrames(listaNuevos[i]);
-                }
-            }
 
-        }
         for(auto& proceso: listaListos){
             proceso->setEstadoActual("Listos");
             if(proceso->getTLL()==-1){
